@@ -126,14 +126,16 @@ final class MovieQuizViewController: UIViewController {
                 text: text,
                 buttonText: "Сыграть ещё раз")
             show(quiz: viewModel)
+            imageView.layer.borderColor = UIColor.clear.cgColor // решил таким кодом исправить ситуацию, так как код "imageView.layer.borderWidth = 0" вызвал у меня мелкий баг c визульным показом ответа
         } else {
             currentQuestionIndex += 1
             let nextQuestion = questions[currentQuestionIndex]
             let viewModel = convert(model: nextQuestion)
             show(quiz: viewModel)
+            imageView.layer.borderColor = UIColor.clear.cgColor // решил таким кодом исправить ситуацию, так как код "imageView.layer.borderWidth = 0" вызвал у меня мелкий баг c визульным показом ответа
         }
     }
-
+    
     private func show(quiz result: QuizResultsViewModel) {
         let alert = UIAlertController(
             title: result.title,
