@@ -64,7 +64,7 @@
                                         <color key="textColor" name="YP White (iOS)"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="AQY-X2-k4A">
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="AQY-X2-k4A" userLabel="Stack View">
                                         <rect key="frame" x="0.0" y="744" width="374" height="60"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XPT-18-Y3p" userLabel="No button">
@@ -122,6 +122,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="blockingButtons" destination="AQY-X2-k4A" id="ZRi-8e-P3e"/>
                         <outlet property="counterLabel" destination="vUa-r0-tMR" id="GUw-HU-AFs"/>
                         <outlet property="imageView" destination="dfT-BT-c2o" id="h4L-za-QhR"/>
                         <outlet property="textLabel" destination="Vyp-MI-JYq" id="hoz-bM-ObO"/>

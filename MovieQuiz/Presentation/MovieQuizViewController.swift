@@ -12,7 +12,8 @@ final class MovieQuizViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var textLabel: UILabel!
     @IBOutlet var counterLabel: UILabel!
-
+    @IBOutlet weak var blockingButtons: UIButton!
+    
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
         let currentQuestion = questions[currentQuestionIndex]
         let givenAnswer = true
@@ -24,7 +25,7 @@ final class MovieQuizViewController: UIViewController {
         let givenAnswer = false
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
-
+    
     struct QuizQuestion {
         let image: String
         let text: String
@@ -105,6 +106,9 @@ final class MovieQuizViewController: UIViewController {
     }
 
     private func showAnswerResult(isCorrect: Bool) {
+        
+        blockingButtons.isEnabled = false
+        
         if isCorrect {
             correctAnswers += 1
         }
@@ -119,6 +123,9 @@ final class MovieQuizViewController: UIViewController {
     }
 
     private func showNextQuestionOrResults() {
+        
+        blockingButtons.isEnabled = true
+        
         if currentQuestionIndex == questions.count - 1 {
             let text = "Ваш результат: \(correctAnswers)/10"
             let viewModel = QuizResultsViewModel(
@@ -126,13 +133,13 @@ final class MovieQuizViewController: UIViewController {
                 text: text,
                 buttonText: "Сыграть ещё раз")
             show(quiz: viewModel)
-            imageView.layer.borderColor = UIColor.clear.cgColor // решил таким кодом исправить ситуацию, так как код "imageView.layer.borderWidth = 0" вызвал у меня мелкий баг c визульным показом ответа
+            imageView.layer.borderColor = UIColor.clear.cgColor
         } else {
             currentQuestionIndex += 1
             let nextQuestion = questions[currentQuestionIndex]
             let viewModel = convert(model: nextQuestion)
             show(quiz: viewModel)
-            imageView.layer.borderColor = UIColor.clear.cgColor // решил таким кодом исправить ситуацию, так как код "imageView.layer.borderWidth = 0" вызвал у меня мелкий баг c визульным показом ответа
+            imageView.layer.borderColor = UIColor.clear.cgColor
         }
     }
     
