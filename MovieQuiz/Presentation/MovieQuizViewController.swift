@@ -1,12 +1,14 @@
 import UIKit
 
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
-    
+
+    // MARK: - IBOutlet
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var textLabel: UILabel!
     @IBOutlet var counterLabel: UILabel!
     @IBOutlet weak var blockingButtons: UIButton!
     
+    // MARK: - IBAction
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
         guard let currentQuestion = currentQuestion else {
             return
@@ -22,6 +24,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
     
+    // MARK: - Private Properties
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
     private var statisticService: StatisticService?
@@ -29,6 +32,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private var currentQuestionIndex: Int = 0
     private var correctAnswers: Int = 0
     private let questionsAmount: Int = 10
+    private lazy var alertPresenter = AlertPresenter(viewController: self)
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -123,7 +127,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                 self?.correctAnswers = 0
                 self?.questionFactory?.requestNextQuestion()
             }
-        let alertPresenter = AlertPresenter(viewController: self)
         alertPresenter.showAlert(model: alertModel)
     }
 }

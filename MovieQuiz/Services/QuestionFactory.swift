@@ -1,10 +1,13 @@
 import Foundation
 
+// MARK: - QuestionFactory
 class QuestionFactory: QuestionFactoryProtocol {
     weak var delegate: QuestionFactoryDelegate?
+    
     func setup(delegate: QuestionFactoryDelegate) {
         self.delegate = delegate
     }
+    
     private let questions: [QuizQuestion] = [
         QuizQuestion(
             image: "The Godfather",
@@ -48,19 +51,18 @@ class QuestionFactory: QuestionFactoryProtocol {
             correctAnswer: false)
     ]
     
+// MARK: - requestNextQuestion
     func requestNextQuestion() {
         guard let index = (0..<questions.count).randomElement() else {
             delegate?.didReceiveNextQuestion(question: nil)
             return
         }
-        
         let question = questions[index]
         delegate?.didReceiveNextQuestion(question: question)
     }
 }
 
-private var questionFactory: QuestionFactoryProtocol?
-
+// MARK: - Mock-данные
 /*
  Mock-данные
  

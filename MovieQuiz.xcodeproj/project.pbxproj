@@ -111,8 +111,8 @@
 			children = (
 				AD1ABAB12831907B00B3E448 /* AppDelegate.swift */,
 				AD1ABAB32831907B00B3E448 /* SceneDelegate.swift */,
-				DD6D2E512BA42F16008FB777 /* Services */,
 				DD6D2E542BA43384008FB777 /* Models */,
+				DD6D2E512BA42F16008FB777 /* Services */,
 				ADF0CF75283FDAA10075F54D /* Helpers */,
 				8F4738322848DE2A005DF65E /* Presentation */,
 				8F4738332848DE46005DF65E /* Resources */,
@@ -146,9 +146,9 @@
 		DD6D2E542BA43384008FB777 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				DD6D2E5A2BA433F9008FB777 /* QuizQuestion.swift */,
 				DD6D2E562BA433E3008FB777 /* QuizStepViewModel.swift */,
 				DD6D2E582BA433EF008FB777 /* QuizResultsViewModel.swift */,
-				DD6D2E5A2BA433F9008FB777 /* QuizQuestion.swift */,
 				DD6676B72BA5DCEF009CAEE2 /* AlertModel.swift */,
 			);
 			path = Models;

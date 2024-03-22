@@ -1,5 +1,6 @@
 import Foundation
 
+// MARK: - StatisticServiceImplementation
 class StatisticServiceImplementation: StatisticService {
     private let userDefaults = UserDefaults.standard
     
@@ -15,12 +16,31 @@ class StatisticServiceImplementation: StatisticService {
         if newGameRecord.isBetterThan(currentBestGame) {
             currentBestGame = newGameRecord
             bestGame = currentBestGame
+            userDefaults.set(try? JSONEncoder().encode(currentBestGame), forKey: Keys.bestGame.rawValue)
+        }
+    }
+    
+    private var correct: Int {
+        get {
+            return userDefaults.integer(forKey: Keys.correct.rawValue)
+        }
+        set {
+            userDefaults.set(newValue, forKey: Keys.correct.rawValue)
+        }
+    }
+
+    private var total: Int {
+        get {
+            return userDefaults.integer(forKey: Keys.total.rawValue)
+        }
+        set {
+            userDefaults.set(newValue, forKey: Keys.total.rawValue)
         }
     }
 
     var totalAccuracy: Double {
         get {
-            return userDefaults.double(forKey: Keys.totalAccuracy.rawValue)
+            return Double(correct) / Double(total)
         }
         set {
             userDefaults.set(newValue, forKey: Keys.totalAccuracy.rawValue)
@@ -54,14 +74,20 @@ class StatisticServiceImplementation: StatisticService {
     }
     
     func updateGameStats(isCorrect: Bool) {
-        gamesCount += 1
         if isCorrect {
-            totalAccuracy = (totalAccuracy * Double(gamesCount) + 1) / Double(gamesCount + 1)
+            totalAccuracy = (totalAccuracy * Double(gamesCount - 1) + 1) / Double(gamesCount)
+            self.correct += 1
+        }
+        self.total += 1
+        if total % 10 == 0 {
+            gamesCount += 1
         }
     }
     
     func resetGameStats() {
         totalAccuracy = 0
         gamesCount = 0
+        userDefaults.set(0, forKey: Keys.correct.rawValue)
+        userDefaults.set(0, forKey: Keys.total.rawValue)
     }
 }
