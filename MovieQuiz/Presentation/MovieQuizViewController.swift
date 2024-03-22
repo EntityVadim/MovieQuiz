@@ -42,7 +42,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         self.questionFactory = questionFactory
         questionFactory.requestNextQuestion()
         statisticService = StatisticServiceImplementation()
-        statisticService?.store(correct: correctAnswers, total: questionsAmount)
     }
     
     // MARK: - QuestionFactoryDelegate
@@ -105,6 +104,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             let bestGameInfo = "Рекорд: \(bestGame.correct)/\(bestGame.total) (\(dateString))"
             let averageAccuracy = String(format: "Средняя точность: %.2f%%", statisticService.totalAccuracy * 100)
             gameStatsText = "\(text)\n\(completedGamesCount)\n\(bestGameInfo)\n\(averageAccuracy)"
+            statisticService.store(correct: correctAnswers, total: questionsAmount)
             let viewModel = QuizResultsViewModel(
                 title: "Этот раунд окончен!",
                 text: gameStatsText,
