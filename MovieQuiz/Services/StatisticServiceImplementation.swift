@@ -20,6 +20,24 @@ class StatisticServiceImplementation: StatisticService {
         }
     }
     
+    func updateGameStats(isCorrect: Bool) {
+        if isCorrect {
+            correct += 1
+        }
+        total += 1
+        totalAccuracy = total > 0 ? Double(correct) / Double(total) : 0.0
+        if total % 10 == 0 {
+            gamesCount += 1
+        }
+    }
+    
+    func resetGameStats() {
+        totalAccuracy = 0
+        gamesCount = 0
+        userDefaults.set(0, forKey: Keys.correct.rawValue)
+        userDefaults.set(0, forKey: Keys.total.rawValue)
+    }
+    
     private var correct: Int {
         get {
             return userDefaults.integer(forKey: Keys.correct.rawValue)
@@ -40,7 +58,7 @@ class StatisticServiceImplementation: StatisticService {
 
     var totalAccuracy: Double {
         get {
-            return Double(correct) / Double(total)
+            return userDefaults.double(forKey: Keys.totalAccuracy.rawValue)
         }
         set {
             userDefaults.set(newValue, forKey: Keys.totalAccuracy.rawValue)
@@ -71,23 +89,5 @@ class StatisticServiceImplementation: StatisticService {
             }
             userDefaults.set(data, forKey: Keys.bestGame.rawValue)
         }
-    }
-    
-    func updateGameStats(isCorrect: Bool) {
-        if isCorrect {
-            totalAccuracy = (totalAccuracy * Double(gamesCount - 1) + 1) / Double(gamesCount)
-            self.correct += 1
-        }
-        self.total += 1
-        if total % 10 == 0 {
-            gamesCount += 1
-        }
-    }
-    
-    func resetGameStats() {
-        totalAccuracy = 0
-        gamesCount = 0
-        userDefaults.set(0, forKey: Keys.correct.rawValue)
-        userDefaults.set(0, forKey: Keys.total.rawValue)
     }
 }
