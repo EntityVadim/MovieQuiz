@@ -94,6 +94,9 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             guard let statisticService = statisticService else {
                 return
             }
+            let correctAnswersCount = self.correctAnswers
+            let totalQuestions = questionsAmount
+            statisticService.store(correct: correctAnswersCount, total: totalQuestions)
             let correctAnswers = self.correctAnswers
             let text = "Ваш результат: \(correctAnswers)/10"
             let completedGamesCount = "Количество сыгранных квизов: \(statisticService.gamesCount)"
@@ -104,7 +107,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             let bestGameInfo = "Рекорд: \(bestGame.correct)/\(bestGame.total) (\(dateString))"
             let averageAccuracy = String(format: "Средняя точность: %.2f%%", statisticService.totalAccuracy * 100)
             gameStatsText = "\(text)\n\(completedGamesCount)\n\(bestGameInfo)\n\(averageAccuracy)"
-            statisticService.store(correct: correctAnswers, total: questionsAmount)
             let viewModel = QuizResultsViewModel(
                 title: "Этот раунд окончен!",
                 text: gameStatsText,

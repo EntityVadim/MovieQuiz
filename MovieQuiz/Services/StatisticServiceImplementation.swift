@@ -17,7 +17,6 @@ class StatisticServiceImplementation: StatisticService {
             currentBestGame = newGameRecord
             bestGame = currentBestGame
             userDefaults.set(try? JSONEncoder().encode(currentBestGame), forKey: Keys.bestGame.rawValue)
-            userDefaults.synchronize()
         }
     }
     
