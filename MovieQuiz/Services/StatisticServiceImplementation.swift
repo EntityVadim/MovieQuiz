@@ -8,6 +8,7 @@ class StatisticServiceImplementation: StatisticService {
         case correct, total, bestGame, gamesCount, totalAccuracy
     }
     
+    // MARK: - Public Methods
     func store(correct count: Int, total amount: Int) {
         self.correct += count
         self.total += amount
@@ -36,24 +37,7 @@ class StatisticServiceImplementation: StatisticService {
         userDefaults.set(0, forKey: Keys.total.rawValue)
     }
     
-    private var correct: Int {
-        get {
-            return userDefaults.integer(forKey: Keys.correct.rawValue)
-        }
-        set {
-            userDefaults.set(newValue, forKey: Keys.correct.rawValue)
-        }
-    }
-
-    private var total: Int {
-        get {
-            return userDefaults.integer(forKey: Keys.total.rawValue)
-        }
-        set {
-            userDefaults.set(newValue, forKey: Keys.total.rawValue)
-        }
-    }
-
+    // MARK: - Public Properties
     var totalAccuracy: Double {
         if total == 0 {
             return 0
@@ -85,6 +69,25 @@ class StatisticServiceImplementation: StatisticService {
                 return
             }
             userDefaults.set(data, forKey: Keys.bestGame.rawValue)
+        }
+    }
+    
+    // MARK: - Private Properties
+    private var correct: Int {
+        get {
+            return userDefaults.integer(forKey: Keys.correct.rawValue)
+        }
+        set {
+            userDefaults.set(newValue, forKey: Keys.correct.rawValue)
+        }
+    }
+
+    private var total: Int {
+        get {
+            return userDefaults.integer(forKey: Keys.total.rawValue)
+        }
+        set {
+            userDefaults.set(newValue, forKey: Keys.total.rawValue)
         }
     }
 }
