@@ -1,6 +1,6 @@
 import Foundation
 
-// MARK: - QuizQuestionModel
+// MARK: - Quiz Question Model
 struct QuizQuestion {
     let image: String
     let text: String

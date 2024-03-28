@@ -1,6 +1,6 @@
 import UIKit
 
-// MARK: - QuizStepViewModel
+// MARK: - Quiz Step View Model
 struct QuizStepViewModel {
     let image: UIImage
     let question: String

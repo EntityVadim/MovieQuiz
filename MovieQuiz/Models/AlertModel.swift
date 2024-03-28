@@ -1,6 +1,6 @@
 import Foundation
 
-// MARK: - AlertModel
+// MARK: - Alert Model
 struct AlertModel {
     let title: String
     let message: String

@@ -1,6 +1,6 @@
 import Foundation
 
-// MARK: - StatisticServiceImplementation
+// MARK: - Statistic Service Implementation
 class StatisticServiceImplementation: StatisticService {
     private let userDefaults = UserDefaults.standard
     

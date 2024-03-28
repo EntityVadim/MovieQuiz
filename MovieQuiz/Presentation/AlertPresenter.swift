@@ -1,6 +1,6 @@
 import UIKit
 
-// MARK: - AlertPresenter
+// MARK: - Alert Presenter
 class AlertPresenter {
     private weak var viewController: UIViewController?
     

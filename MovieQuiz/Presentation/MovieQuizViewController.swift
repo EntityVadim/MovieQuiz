@@ -1,6 +1,6 @@
 import UIKit
 
-// MARK: - UIViewController(*)
+// MARK: - Movie Quiz View Controller
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     // MARK: - IBOutlet

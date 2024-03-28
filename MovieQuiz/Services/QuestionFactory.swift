@@ -1,6 +1,6 @@
 import Foundation
 
-// MARK: - QuestionFactory
+// MARK: - Question Factory
 class QuestionFactory: QuestionFactoryProtocol {
     weak var delegate: QuestionFactoryDelegate?
 

@@ -1,6 +1,6 @@
 import Foundation
 
-// MARK: - QuestionFactoryDelegateProtocol
+// MARK: - Question Factory Delegate Protocol
 protocol QuestionFactoryDelegate: AnyObject {
     func didReceiveNextQuestion(question: QuizQuestion?)
 }

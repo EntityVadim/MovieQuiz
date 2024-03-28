@@ -1,6 +1,6 @@
 import Foundation
 
-// MARK: - UserDefaults
+// MARK: - User Defaults
 struct GameRecord: Codable {
     let correct: Int
     let total: Int
