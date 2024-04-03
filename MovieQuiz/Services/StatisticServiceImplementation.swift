@@ -1,7 +1,7 @@
 import Foundation
 
 // MARK: - Statistic Service Implementation
-class StatisticServiceImplementation: StatisticService {
+final class StatisticServiceImplementation: StatisticService {
     private let userDefaults = UserDefaults.standard
     
     private enum Keys: String {
