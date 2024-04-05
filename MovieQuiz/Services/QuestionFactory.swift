@@ -1,14 +1,12 @@
 import Foundation
 
 final class QuestionFactory: QuestionFactoryProtocol {
+    // MARK: - Public Properties
     var delegate: QuestionFactoryDelegate?
-    init(moviesLoader: MoviesLoading, delegate: QuestionFactoryDelegate?) {
-        self.moviesLoader = moviesLoader
-        self.delegate = delegate
-    }
+
     // MARK: - Private Properties
     private var movies: [MostPopularMovie] = []
-    private let moviesLoader: MoviesLoading
+    private var moviesLoader = MoviesLoader()
     
     // MARK: - Quiz Questions
     /*   private let questions: [QuizQuestion] = [
@@ -55,6 +53,11 @@ final class QuestionFactory: QuestionFactoryProtocol {
      ]  */
     
     // MARK: - Public Methods
+    init(delegate: QuestionFactoryDelegate?) {
+        self.delegate = delegate
+        moviesLoader = MoviesLoader()
+    }
+    
     func setup(delegate: QuestionFactoryDelegate) {
         self.delegate = delegate
     }
@@ -68,17 +71,20 @@ final class QuestionFactory: QuestionFactoryProtocol {
             do {
                 imageData = try Data(contentsOf: movie.resizedImageURL)
             } catch {
-                print("Failed to load image")
+                DispatchQueue.main.async {
+                    self.delegate?.didReceiveError(error: error)
+                }
+                return
             }
             let rating = Float(movie.rating) ?? 0
             let text = "Рейтинг этого фильма больше чем 7?"
             let correctAnswer = rating > 7
             let question = QuizQuestion(image: imageData,
-                                        text: text,
-                                        correctAnswer: correctAnswer)
+                                            text: text,
+                                            correctAnswer: correctAnswer)
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
-                self.delegate?.didReceiveNextQuestion(question: question)
+                self.delegate?.didReceiveQuestion(question: question)
             }
         }
     }
@@ -89,12 +95,21 @@ final class QuestionFactory: QuestionFactoryProtocol {
                 guard let self = self else { return }
                 switch result {
                 case .success(let mostPopularMovies):
-                    self.movies = mostPopularMovies.items
-                    self.delegate?.didLoadDataFromServer()
+                    if mostPopularMovies.errorMessage.isEmpty {
+                        self.movies = mostPopularMovies.items
+                        self.delegate?.didLoadDataFromServer()
+                    } else {
+                        self.showNetworkError(message: mostPopularMovies.errorMessage)
+                    }
                 case .failure(let error):
                     self.delegate?.didFailToLoadData(with: error)
                 }
             }
         }
+    }
+
+    // MARK: - Private Methods
+    private func showNetworkError(message: String) {
+        delegate?.didReceiveError(error: NSError(domain: "com.yp.MovieQuiz", code: 1, userInfo: [NSLocalizedDescriptionKey: message]))
     }
 }

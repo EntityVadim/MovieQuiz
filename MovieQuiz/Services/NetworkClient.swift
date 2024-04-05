@@ -1,9 +1,12 @@
 import Foundation
 
 struct NetworkClient {
+    // MARK: - Private Properties
     private enum NetworkError: Error {
         case codeError
     }
+    
+    // MARK: - Public methods
     func fetch(url: URL, handler: @escaping (Result<Data, Error>) -> Void) {
         let request = URLRequest(url: url)
         let task = URLSession.shared.dataTask(with: request) { data, response, error in

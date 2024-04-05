@@ -1,8 +1,10 @@
 import UIKit
 
 class AlertPresenter {
+    // MARK: - Private Properties
     private weak var viewController: UIViewController?
     
+    // MARK: - Public methods
     init(viewController: UIViewController) {
         self.viewController = viewController
     }
