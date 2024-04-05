@@ -65,6 +65,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     func didFailToLoadData(with error: Error) {
         showNetworkError(message: error.localizedDescription)
     }
+    
     func didReceiveError(error: Error) {
         if error is URLError && (error as! URLError).code == .notConnectedToInternet {
             questionFactory?.loadData()
