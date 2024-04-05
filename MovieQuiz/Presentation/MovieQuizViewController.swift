@@ -67,18 +67,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     func didReceiveError(error: Error) {
-        if error is URLError && (error as! URLError).code == .notConnectedToInternet {
-            questionFactory?.loadData()
-        } else {
-            let model = AlertModel(
-                title: "Ошибка",
-                message: error.localizedDescription,
-                buttonText: "Попробовать еще раз") { [weak self] in
-                    self?.resetGame()
-                    self?.questionFactory?.loadData()
-                }
-            alertPresenter.showAlert(model: model)
-        }
+        hideLoadingIndicator()
+        let model = AlertModel(
+            title: "Ошибка",
+            message: error.localizedDescription,
+            buttonText: "Попробовать еще раз") { [weak self] in
+                self?.resetGame()
+                self?.questionFactory?.loadData()
+            }
+        alertPresenter.showAlert(model: model)
     }
 
     func didReceiveQuestion(question: QuizQuestion?) {
