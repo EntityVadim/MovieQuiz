@@ -33,13 +33,13 @@
                                         <rect key="frame" x="0.0" y="0.0" width="374" height="23.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Вопрос:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" highlighted="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZCD-5I-CL1" userLabel="Question Title Label">
-                                                <rect key="frame" x="0.0" y="0.0" width="338" height="23.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="333.5" height="23.5"/>
                                                 <fontDescription key="fontDescription" name="YSDisplay-Medium" family="YS Display" pointSize="20"/>
                                                 <color key="textColor" name="YP White (iOS)"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="1/10" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vUa-r0-tMR" userLabel="Index Label">
-                                                <rect key="frame" x="338" y="0.0" width="36" height="23.5"/>
+                                                <rect key="frame" x="333.5" y="0.0" width="40.5" height="23.5"/>
                                                 <fontDescription key="fontDescription" name="YSDisplay-Medium" family="YS Display" pointSize="20"/>
                                                 <color key="textColor" name="YP White (iOS)"/>
                                                 <nil key="highlightedColor"/>
@@ -111,17 +111,23 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="xRx-Xw-M1t">
+                                <rect key="frame" x="197" y="438" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="S2b-Q2-Kf5"/>
                         <color key="backgroundColor" name="YP Black (iOS)"/>
                         <constraints>
+                            <constraint firstItem="xRx-Xw-M1t" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="036-Uw-ceJ"/>
                             <constraint firstItem="S2b-Q2-Kf5" firstAttribute="trailing" secondItem="tXW-Vh-Uoq" secondAttribute="trailing" constant="20" id="3lE-OZ-1V6"/>
                             <constraint firstItem="tXW-Vh-Uoq" firstAttribute="leading" secondItem="S2b-Q2-Kf5" secondAttribute="leading" constant="20" id="FP0-xR-mGD"/>
+                            <constraint firstItem="xRx-Xw-M1t" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="hWs-3L-WLD"/>
                             <constraint firstItem="tXW-Vh-Uoq" firstAttribute="top" secondItem="S2b-Q2-Kf5" secondAttribute="top" constant="10" id="kSN-MD-Jck"/>
                             <constraint firstItem="S2b-Q2-Kf5" firstAttribute="bottom" secondItem="tXW-Vh-Uoq" secondAttribute="bottom" id="sgC-fZ-rsy"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="xRx-Xw-M1t" id="hVJ-lh-SgC"/>
                         <outlet property="blockingButtons" destination="AQY-X2-k4A" id="ZRi-8e-P3e"/>
                         <outlet property="counterLabel" destination="vUa-r0-tMR" id="GUw-HU-AFs"/>
                         <outlet property="imageView" destination="dfT-BT-c2o" id="h4L-za-QhR"/>

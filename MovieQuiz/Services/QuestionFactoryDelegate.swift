@@ -1,6 +1,9 @@
 import Foundation
 
-// MARK: - Question Factory Delegate Protocol
-protocol QuestionFactoryDelegate: AnyObject {
+protocol QuestionFactoryDelegate {
     func didReceiveNextQuestion(question: QuizQuestion?)
+    func didLoadDataFromServer()
+    func didFailToLoadData(with error: Error)
+    func didReceiveError(error: Error)
+    func didReceiveQuestion(question: QuizQuestion?)
 }

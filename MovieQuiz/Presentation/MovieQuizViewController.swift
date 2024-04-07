@@ -4,13 +4,15 @@ import UIKit
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     // MARK: - IBOutlet
-    @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var textLabel: UILabel!
-    @IBOutlet var counterLabel: UILabel!
-    @IBOutlet weak var blockingButtons: UIButton!
+    @IBOutlet private weak var imageView: UIImageView!
+    @IBOutlet private weak var textLabel: UILabel!
+    @IBOutlet private var counterLabel: UILabel!
+    @IBOutlet private weak var blockingButtons: UIButton!
+    @IBOutlet private var activityIndicator: UIActivityIndicatorView!
     
     // MARK: - Private Properties
     private var questionFactory: QuestionFactoryProtocol?
+    private var moviesLoader = MoviesLoader()
     private var currentQuestion: QuizQuestion?
     private var statisticService: StatisticService?
     private var gameStatsText: String = ""
@@ -22,15 +24,61 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        let questionFactory = QuestionFactory()
-        questionFactory.delegate = self
-        self.questionFactory = questionFactory
-        questionFactory.requestNextQuestion()
+        imageView.backgroundColor = .clear
+        textLabel.text = ""
+        imageView.layer.cornerRadius = 20
+        activityIndicator.hidesWhenStopped = true
+        questionFactory = QuestionFactory(delegate: self)
         statisticService = StatisticServiceImplementation()
+        showLoadingIndicator()
+        questionFactory?.loadData()
     }
     
     // MARK: - QuestionFactoryDelegate
     func didReceiveNextQuestion(question: QuizQuestion?) {
+        guard let question = question else {
+            return
+        }
+        currentQuestion = question
+        let viewModel = convert(model: question)
+        DispatchQueue.main.async { [weak self] in
+            self?.show(quiz: viewModel)
+            self?.imageView.image = viewModel.image
+            self?.textLabel.text = viewModel.question
+        }
+    }
+    
+    // MARK: - Public methods
+    func showLoadingIndicator() {
+        activityIndicator.startAnimating()
+    }
+    
+    func hideLoadingIndicator() {
+        activityIndicator.stopAnimating()
+    }
+    
+    func didLoadDataFromServer() {
+        hideLoadingIndicator()
+        questionFactory?.requestNextQuestion()
+    }
+
+    func didFailToLoadData(with error: Error) {
+        showNetworkError(message: error.localizedDescription)
+    }
+    
+    func didReceiveError(error: Error) {
+        hideLoadingIndicator()
+        let model = AlertModel(
+            title: "Ошибка",
+            message: error.localizedDescription,
+            buttonText: "Попробовать еще раз") { [weak self] in
+                self?.resetGame()
+                self?.questionFactory?.loadData()
+            }
+        alertPresenter.showAlert(model: model)
+    }
+
+    func didReceiveQuestion(question: QuizQuestion?) {
         guard let question = question else {
             return
         }
@@ -59,11 +107,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     // MARK: - Private Methods
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
-        let questionStep = QuizStepViewModel(
-            image: UIImage(named: model.image) ?? UIImage(),
+        return QuizStepViewModel(
+            image: UIImage(data: model.image)!,
             question: model.text,
             questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
-        return questionStep
     }
     
     private func show(quiz step: QuizStepViewModel) {
@@ -96,10 +143,9 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             guard let statisticService = statisticService else {
                 return
             }
-            let correctAnswersCount = self.correctAnswers
-            let totalQuestions = questionsAmount
-            statisticService.store(correct: correctAnswersCount, total: totalQuestions)
             let correctAnswers = self.correctAnswers
+            let totalQuestions = questionsAmount
+            statisticService.store(correct: correctAnswers, total: totalQuestions)
             let text = "Ваш результат: \(correctAnswers)/10"
             let completedGamesCount = "Количество сыгранных квизов: \(statisticService.gamesCount)"
             let bestGame = statisticService.bestGame
@@ -122,16 +168,33 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             imageView.layer.borderColor = UIColor.clear.cgColor
         }
     }
+
     
     private func show(quiz result: QuizResultsViewModel) {
         let alertModel = AlertModel(
             title: result.title,
             message: gameStatsText,
             buttonText: result.buttonText) { [weak self] in
-                self?.currentQuestionIndex = 0
-                self?.correctAnswers = 0
-                self?.questionFactory?.requestNextQuestion()
+                self?.resetGame()
             }
         alertPresenter.showAlert(model: alertModel)
+    }
+    
+    private func resetGame() {
+        currentQuestionIndex = 0
+        correctAnswers = 0
+        questionFactory?.requestNextQuestion()
+    }
+    
+    private func showNetworkError(message: String) {
+        hideLoadingIndicator()
+        let model = AlertModel(
+            title: "Ошибка",
+            message: message,
+            buttonText: "Попробовать еще раз") { [weak self] in
+                self?.resetGame()
+                self?.questionFactory?.loadData()
+            }
+        alertPresenter.showAlert(model: model)
     }
 }

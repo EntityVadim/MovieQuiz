@@ -1,6 +1,5 @@
 import Foundation
 
-// MARK: - Statistic Service Protocol
 protocol StatisticService {
     var totalAccuracy: Double { get }
     var gamesCount: Int { get }
