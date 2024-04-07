@@ -1,12 +1,14 @@
 import Foundation
 
+// MARK: - Question Factory
 final class QuestionFactory: QuestionFactoryProtocol {
     // MARK: - Public Properties
     var delegate: QuestionFactoryDelegate?
-
+    
     // MARK: - Private Properties
     private var movies: [MostPopularMovie] = []
     private var moviesLoader = MoviesLoader()
+    private var lastRandomRating: Float?
     
     // MARK: - Quiz Questions
     /*   private let questions: [QuizQuestion] = [
@@ -71,19 +73,24 @@ final class QuestionFactory: QuestionFactoryProtocol {
             do {
                 imageData = try Data(contentsOf: movie.resizedImageURL)
             } catch {
+                let detailedError = NSError(domain: "MovieQuizErrorDomain",
+                                            code: 1001,
+                                            userInfo: [NSLocalizedDescriptionKey: "Не удалось загрузить изображение для фильма: \(movie.title). Проверьте соединение с интернетом и попробуйте снова."])
                 DispatchQueue.main.async {
-                    self.delegate?.didReceiveError(error: error)
+                    self.delegate?.didReceiveError(error: detailedError)
                 }
                 return
             }
             let rating = Float(movie.rating) ?? 0
-            let text = "Рейтинг этого фильма больше чем 7?"
-            let correctAnswer = rating > 7
-            let question = QuizQuestion(image: imageData,
-                                            text: text,
-                                            correctAnswer: correctAnswer)
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
+            var randomRating: Float
+            repeat {
+                randomRating = Float.random(in: 8.1...8.8).rounded(toPlaces: 1)
+            } while randomRating == self.lastRandomRating
+            self.lastRandomRating = randomRating
+            let text = "Рейтинг этого фильма больше чем \(randomRating)?"
+            let correctAnswer = rating > randomRating
+            let question = QuizQuestion(image: imageData, text: text, correctAnswer: correctAnswer)
+            DispatchQueue.main.async {
                 self.delegate?.didReceiveQuestion(question: question)
             }
         }
@@ -107,9 +114,17 @@ final class QuestionFactory: QuestionFactoryProtocol {
             }
         }
     }
-
+    
     // MARK: - Private Methods
     private func showNetworkError(message: String) {
         delegate?.didReceiveError(error: NSError(domain: "com.yp.MovieQuiz", code: 1, userInfo: [NSLocalizedDescriptionKey: message]))
+    }
+}
+
+// MARK: - Float
+extension Float {
+    func rounded(toPlaces places: Int) -> Float {
+        let divisor = pow(10.0, Float(places))
+        return (self * divisor).rounded() / divisor
     }
 }
