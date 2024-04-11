@@ -120,11 +120,3 @@ final class QuestionFactory: QuestionFactoryProtocol {
         delegate?.didReceiveError(error: NSError(domain: "com.yp.MovieQuiz", code: 1, userInfo: [NSLocalizedDescriptionKey: message]))
     }
 }
-
-// MARK: - Float
-extension Float {
-    func rounded(toPlaces places: Int) -> Float {
-        let divisor = pow(10.0, Float(places))
-        return (self * divisor).rounded() / divisor
-    }
-}
