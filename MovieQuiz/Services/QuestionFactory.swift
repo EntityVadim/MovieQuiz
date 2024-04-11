@@ -3,7 +3,7 @@ import Foundation
 // MARK: - Question Factory
 final class QuestionFactory: QuestionFactoryProtocol {
     // MARK: - Public Properties
-    var delegate: QuestionFactoryDelegate?
+    weak var delegate: QuestionFactoryDelegate?
     
     // MARK: - Private Properties
     private var movies: [MostPopularMovie] = []
