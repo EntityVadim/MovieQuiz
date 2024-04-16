@@ -1,9 +1,11 @@
 import UIKit
 
 // MARK: - Movie Quiz View Controller
+
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     // MARK: - IBOutlet
+    
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var textLabel: UILabel!
     @IBOutlet private var counterLabel: UILabel!
@@ -11,6 +13,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private var activityIndicator: UIActivityIndicatorView!
     
     // MARK: - Private Properties
+    
     private var questionFactory: QuestionFactoryProtocol?
     private var moviesLoader = MoviesLoader()
     private var currentQuestion: QuizQuestion?
@@ -22,6 +25,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private lazy var alertPresenter = AlertPresenter(viewController: self)
     
     // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         imageView.backgroundColor = .clear
@@ -35,6 +39,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     // MARK: - QuestionFactoryDelegate
+    
     func didReceiveNextQuestion(question: QuizQuestion?) {
         guard let question = question else {
             return
@@ -49,6 +54,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     // MARK: - Public methods
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return.lightContent
+    }
+    
     func showLoadingIndicator() {
         activityIndicator.startAnimating()
     }
@@ -61,7 +71,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         hideLoadingIndicator()
         questionFactory?.requestNextQuestion()
     }
-
+    
     func didFailToLoadData(with error: Error) {
         showNetworkError(message: error.localizedDescription)
     }
@@ -71,13 +81,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         let model = AlertModel(
             title: "Ошибка",
             message: error.localizedDescription,
-            buttonText: "Попробовать еще раз") { [weak self] in
+            buttonText: "Попробовать еще раз",
+            completion: { [weak self] in
                 self?.resetGame()
                 self?.questionFactory?.loadData()
-            }
+            },
+            accessibilityIndicator: "ErrorAlert")
         alertPresenter.showAlert(model: model)
     }
-
+    
     func didReceiveQuestion(question: QuizQuestion?) {
         guard let question = question else {
             return
@@ -90,6 +102,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     // MARK: - IBAction
+    
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
         guard let currentQuestion = currentQuestion else {
             return
@@ -97,6 +110,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         let givenAnswer = true
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
+    
     @IBAction private func noButtonClicked(_ sender: UIButton) {
         guard let currentQuestion = currentQuestion else {
             return
@@ -106,6 +120,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     // MARK: - Private Methods
+    
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
         return QuizStepViewModel(
             image: UIImage(data: model.image)!,
@@ -168,15 +183,16 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             imageView.layer.borderColor = UIColor.clear.cgColor
         }
     }
-
     
     private func show(quiz result: QuizResultsViewModel) {
         let alertModel = AlertModel(
             title: result.title,
             message: gameStatsText,
-            buttonText: result.buttonText) { [weak self] in
+            buttonText: result.buttonText,
+            completion: { [weak self] in
                 self?.resetGame()
-            }
+            },
+            accessibilityIndicator: "QuizResultsAlert")
         alertPresenter.showAlert(model: alertModel)
     }
     
@@ -191,10 +207,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         let model = AlertModel(
             title: "Ошибка",
             message: message,
-            buttonText: "Попробовать еще раз") { [weak self] in
+            buttonText: "Попробовать еще раз",
+            completion: { [weak self] in
                 self?.resetGame()
                 self?.questionFactory?.loadData()
-            }
+            },
+            accessibilityIndicator: "NetworkErrorAlert")
         alertPresenter.showAlert(model: model)
     }
 }

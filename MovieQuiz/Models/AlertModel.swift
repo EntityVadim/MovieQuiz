@@ -5,4 +5,5 @@ struct AlertModel {
     let message: String
     let buttonText: String
     let completion: () -> Void
+    let accessibilityIndicator: String
 }

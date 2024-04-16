@@ -1,17 +1,22 @@
 import Foundation
 
 // MARK: - Question Factory
+
 final class QuestionFactory: QuestionFactoryProtocol {
+    
     // MARK: - Public Properties
+    
     weak var delegate: QuestionFactoryDelegate?
     
     // MARK: - Private Properties
+    
     private var movies: [MostPopularMovie] = []
     private var moviesLoader = MoviesLoader()
     private var lastRandomRating: Float?
     
     // MARK: - Quiz Questions
-    /*   private let questions: [QuizQuestion] = [
+    
+  /*private let questions: [QuizQuestion] = [
      QuizQuestion(
      image: "The Godfather",
      text: "Рейтинг этого фильма больше чем 6?",
@@ -52,9 +57,10 @@ final class QuestionFactory: QuestionFactoryProtocol {
      image: "Vivarium",
      text: "Рейтинг этого фильма больше чем 6?",
      correctAnswer: false)
-     ]  */
+     ]*/
     
     // MARK: - Public Methods
+    
     init(delegate: QuestionFactoryDelegate?) {
         self.delegate = delegate
         moviesLoader = MoviesLoader()
@@ -73,9 +79,10 @@ final class QuestionFactory: QuestionFactoryProtocol {
             do {
                 imageData = try Data(contentsOf: movie.resizedImageURL)
             } catch {
-                let detailedError = NSError(domain: "MovieQuizErrorDomain",
-                                            code: 1001,
-                                            userInfo: [NSLocalizedDescriptionKey: "Не удалось загрузить изображение для фильма: \(movie.title). Проверьте соединение с интернетом и попробуйте снова."])
+                let detailedError = NSError(
+                    domain: "MovieQuizErrorDomain",
+                    code: 1001,
+                    userInfo: [NSLocalizedDescriptionKey: "Не удалось загрузить изображение для фильма: \(movie.title). Проверьте соединение с интернетом и попробуйте снова."])
                 DispatchQueue.main.async {
                     self.delegate?.didReceiveError(error: detailedError)
                 }
@@ -116,6 +123,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
     }
     
     // MARK: - Private Methods
+    
     private func showNetworkError(message: String) {
         delegate?.didReceiveError(error: NSError(domain: "com.yp.MovieQuiz", code: 1, userInfo: [NSLocalizedDescriptionKey: message]))
     }
