@@ -2,8 +2,15 @@ import UIKit
 
 final class MovieQuizPresenter {
     
+    // MARK: - Public Properties
+    
     let questionsAmount: Int = 10
+    
+    // MARK: - Private Properties
+    
     private var currentQuestionIndex: Int = 0
+    
+    // MARK: - Public methods
     
     func isLastQuestion() -> Bool {
         currentQuestionIndex == questionsAmount - 1
