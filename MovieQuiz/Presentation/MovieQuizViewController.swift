@@ -35,6 +35,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         statisticService = StatisticServiceImplementation()
         showLoadingIndicator()
         questionFactory?.loadData()
+        presenter.viewController = self
     }
     
     // MARK: - QuestionFactoryDelegate
@@ -103,19 +104,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     // MARK: - IBAction
     
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
-        guard let currentQuestion = currentQuestion else {
-            return
-        }
-        let givenAnswer = true
-        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        presenter.currentQuestion = currentQuestion
+        presenter.yesButtonClicked()
     }
     
     @IBAction private func noButtonClicked(_ sender: UIButton) {
-        guard let currentQuestion = currentQuestion else {
-            return
-        }
-        let givenAnswer = false
-        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        presenter.currentQuestion = currentQuestion
+        presenter.noButtonClicked()
     }
     
     // MARK: - Private Methods
@@ -128,7 +123,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         counterLabel.text = step.questionNumber
     }
     
-    private func showAnswerResult(isCorrect: Bool) {
+    func showAnswerResult(isCorrect: Bool) {
         guard currentQuestion != nil else {
             return
         }
@@ -149,21 +144,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private func showNextQuestionOrResults() {
         blockingButtons.isEnabled = true
         if presenter.isLastQuestion() {
-            guard let statisticService = statisticService else {
-                return
-            }
-            let correctAnswers = self.correctAnswers
-            let totalQuestions = presenter.questionsAmount
-            statisticService.store(correct: correctAnswers, total: totalQuestions)
-            let text = "Ваш результат: \(correctAnswers)/10"
-            let completedGamesCount = "Количество сыгранных квизов: \(statisticService.gamesCount)"
-            let bestGame = statisticService.bestGame
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd.MM.yyyy HH:mm"
-            let dateString = dateFormatter.string(from: bestGame.date)
-            let bestGameInfo = "Рекорд: \(bestGame.correct)/\(bestGame.total) (\(dateString))"
-            let averageAccuracy = String(format: "Средняя точность: %.2f%%", statisticService.totalAccuracy * 100)
-            gameStatsText = "\(text)\n\(completedGamesCount)\n\(bestGameInfo)\n\(averageAccuracy)"
             let viewModel = QuizResultsViewModel(
                 title: "Этот раунд окончен!",
                 text: gameStatsText,
@@ -179,6 +159,21 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func show(quiz result: QuizResultsViewModel) {
+        guard let statisticService = statisticService else {
+            return
+        }
+        let correctAnswers = self.correctAnswers
+        let totalQuestions = presenter.questionsAmount
+        statisticService.store(correct: correctAnswers, total: totalQuestions)
+        let text = "Ваш результат: \(correctAnswers)/10"
+        let completedGamesCount = "Количество сыгранных квизов: \(statisticService.gamesCount)"
+        let bestGame = statisticService.bestGame
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm"
+        let dateString = dateFormatter.string(from: bestGame.date)
+        let bestGameInfo = "Рекорд: \(bestGame.correct)/\(bestGame.total) (\(dateString))"
+        let averageAccuracy = String(format: "Средняя точность: %.2f%%", statisticService.totalAccuracy * 100)
+        gameStatsText = "\(text)\n\(completedGamesCount)\n\(bestGameInfo)\n\(averageAccuracy)"
         let alertModel = AlertModel(
             title: result.title,
             message: gameStatsText,
