@@ -1,15 +1,14 @@
 import UIKit
 
-final class MovieQuizPresenter {
+final class MovieQuizPresenter: QuestionFactoryDelegate {
     
     // MARK: - Public Properties
     
     var correctAnswers: Int = 0
     let questionsAmount: Int = 10
     var currentQuestion: QuizQuestion?
+    var questionFactory: QuestionFactoryProtocol?
     weak var viewController: MovieQuizViewController?
-    weak var imageView: UIImageView?
-    weak var textLabel: UILabel?
     
     // MARK: - Private Properties
     
@@ -44,9 +43,49 @@ final class MovieQuizPresenter {
         let viewModel = convert(model: question)
         DispatchQueue.main.async { [weak self] in
             self?.viewController?.show(quiz: viewModel)
-            self?.imageView?.image = viewModel.image
-            self?.textLabel?.text = viewModel.question
+            self?.viewController?.imageView?.image = viewModel.image
+            self?.viewController?.textLabel?.text = viewModel.question
         }
+    }
+    
+    func didLoadDataFromServer() {
+        viewController?.hideLoadingIndicator()
+        questionFactory?.requestNextQuestion()
+    }
+
+    func didFailToLoadData(with error: Error) {
+        viewController?.showNetworkError(message: error.localizedDescription)
+    }
+
+    func didReceiveError(error: Error) {
+        viewController?.hideLoadingIndicator()
+        let model = AlertModel(
+            title: "Ошибка",
+            message: error.localizedDescription,
+            buttonText: "Попробовать еще раз",
+            completion: { [weak self] in
+                self?.resetGame()
+                self?.questionFactory?.loadData()
+            },
+            accessibilityIndicator: "ErrorAlert")
+        viewController?.alertPresenter.showAlert(model: model)
+    }
+
+    func didReceiveQuestion(question: QuizQuestion?) {
+        guard let question = question else {
+            return
+        }
+        currentQuestion = question
+        let viewModel = convert(model: question)
+        DispatchQueue.main.async { [weak self] in
+            self?.viewController?.show(quiz: viewModel)
+        }
+    }
+    
+    func resetGame() {
+        currentQuestionIndex = 0
+        correctAnswers = 0
+        questionFactory?.requestNextQuestion()
     }
     
     func yesButtonClicked() {
@@ -65,4 +104,3 @@ final class MovieQuizPresenter {
         viewController?.showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
 }
-
