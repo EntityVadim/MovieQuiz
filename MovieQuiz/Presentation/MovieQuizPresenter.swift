@@ -4,6 +4,7 @@ final class MovieQuizPresenter {
     
     // MARK: - Public Properties
     
+    var correctAnswers: Int = 0
     let questionsAmount: Int = 10
     var currentQuestion: QuizQuestion?
     weak var viewController: MovieQuizViewController?
@@ -56,7 +57,7 @@ final class MovieQuizPresenter {
         didAnswer(isYes: false)
     }
     
-    private func didAnswer(isYes: Bool) {
+    func didAnswer(isYes: Bool) {
         guard let currentQuestion = currentQuestion else {
             return
         }

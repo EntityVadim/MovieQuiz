@@ -19,7 +19,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private var currentQuestion: QuizQuestion?
     private var statisticService: StatisticService?
     private var gameStatsText: String = ""
-    private var correctAnswers: Int = 0
     private lazy var alertPresenter = AlertPresenter(viewController: self)
     private lazy var presenter = MovieQuizPresenter()
     
@@ -119,7 +118,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         blockingButtons.isEnabled = false
         statisticService?.updateGameStats(isCorrect: isCorrect)
         if isCorrect {
-            correctAnswers += 1
+            presenter.correctAnswers += 1
         }
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
@@ -151,7 +150,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         guard let statisticService = statisticService else {
             return
         }
-        let correctAnswers = self.correctAnswers
+        let correctAnswers = presenter.correctAnswers
         let totalQuestions = presenter.questionsAmount
         statisticService.store(correct: correctAnswers, total: totalQuestions)
         let text = "Ваш результат: \(correctAnswers)/10"
@@ -176,7 +175,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     func resetGame() {
         presenter.resetQuestionIndex()
-        correctAnswers = 0
+        presenter.correctAnswers = 0
         questionFactory?.requestNextQuestion()
     }
     
