@@ -130,7 +130,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         }
     }
     
-    private func showNextQuestionOrResults() {
+    func showNextQuestionOrResults() {
         blockingButtons.isEnabled = true
         if presenter.isLastQuestion() {
             let viewModel = QuizResultsViewModel(
@@ -147,7 +147,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         }
     }
     
-    private func show(quiz result: QuizResultsViewModel) {
+    func show(quiz result: QuizResultsViewModel) {
         guard let statisticService = statisticService else {
             return
         }
@@ -174,13 +174,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         alertPresenter.showAlert(model: alertModel)
     }
     
-    private func resetGame() {
+    func resetGame() {
         presenter.resetQuestionIndex()
         correctAnswers = 0
         questionFactory?.requestNextQuestion()
     }
     
-    private func showNetworkError(message: String) {
+    func showNetworkError(message: String) {
         hideLoadingIndicator()
         let model = AlertModel(
             title: "Ошибка",

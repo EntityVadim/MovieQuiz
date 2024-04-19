@@ -7,6 +7,8 @@ final class MovieQuizPresenter {
     let questionsAmount: Int = 10
     var currentQuestion: QuizQuestion?
     weak var viewController: MovieQuizViewController?
+    weak var imageView: UIImageView?
+    weak var textLabel: UILabel?
     
     // MARK: - Private Properties
     
@@ -41,8 +43,8 @@ final class MovieQuizPresenter {
         let viewModel = convert(model: question)
         DispatchQueue.main.async { [weak self] in
             self?.viewController?.show(quiz: viewModel)
-            self?.imageView.image = viewModel.image
-            self?.textLabel.text = viewModel.question
+            self?.imageView?.image = viewModel.image
+            self?.textLabel?.text = viewModel.question
         }
     }
     
