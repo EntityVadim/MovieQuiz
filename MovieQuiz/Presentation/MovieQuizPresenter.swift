@@ -2,7 +2,7 @@ import UIKit
 
 // // MARK: - MovieQuizPresenter
 
-final class MovieQuizPresenter: QuestionFactoryDelegate {
+final class MovieQuizPresenter {
     
     // MARK: - Public Properties
     
@@ -17,6 +17,13 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     private var currentQuestionIndex: Int = 0
     
     // MARK: - Public methods
+    
+    init(viewController: MovieQuizViewController) {
+        self.viewController = viewController
+        questionFactory = QuestionFactory(delegate: self)
+        questionFactory?.loadData()
+        viewController.showLoadingIndicator()
+    }
     
     func isLastQuestion() -> Bool {
         currentQuestionIndex == questionsAmount - 1
@@ -35,53 +42,6 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             image: UIImage(data: model.image)!,
             question: model.text,
             questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
-    }
-    
-    func didReceiveNextQuestion(question: QuizQuestion?) {
-        guard let question = question else {
-            return
-        }
-        currentQuestion = question
-        let viewModel = convert(model: question)
-        DispatchQueue.main.async { [weak self] in
-            self?.viewController?.show(quiz: viewModel)
-            self?.viewController?.imageView?.image = viewModel.image
-            self?.viewController?.textLabel?.text = viewModel.question
-        }
-    }
-    
-    func didLoadDataFromServer() {
-        viewController?.hideLoadingIndicator()
-        questionFactory?.requestNextQuestion()
-    }
-
-    func didFailToLoadData(with error: Error) {
-        viewController?.showNetworkError(message: error.localizedDescription)
-    }
-
-    func didReceiveError(error: Error) {
-        viewController?.hideLoadingIndicator()
-        let model = AlertModel(
-            title: "Ошибка",
-            message: error.localizedDescription,
-            buttonText: "Попробовать еще раз",
-            completion: { [weak self] in
-                self?.resetGame()
-                self?.questionFactory?.loadData()
-            },
-            accessibilityIndicator: "ErrorAlert")
-        viewController?.alertPresenter.showAlert(model: model)
-    }
-
-    func didReceiveQuestion(question: QuizQuestion?) {
-        guard let question = question else {
-            return
-        }
-        currentQuestion = question
-        let viewModel = convert(model: question)
-        DispatchQueue.main.async { [weak self] in
-            self?.viewController?.show(quiz: viewModel)
-        }
     }
     
     func resetGame() {
@@ -104,5 +64,45 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         }
         let givenAnswer = isYes
         viewController?.showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+    }
+}
+
+// MARK: - QuestionFactoryDelegate
+
+extension MovieQuizPresenter: QuestionFactoryDelegate {
+    func didLoadDataFromServer() {
+        viewController?.hideLoadingIndicator()
+        questionFactory?.requestNextQuestion()
+    }
+    
+    func didFailToLoadData(with error: Error) {
+        viewController?.showNetworkError(message: error.localizedDescription)
+    }
+    
+    func didReceiveError(error: Error) {
+        viewController?.hideLoadingIndicator()
+        let model = AlertModel(
+            title: "Ошибка",
+            message: error.localizedDescription,
+            buttonText: "Попробовать еще раз",
+            completion: { [weak self] in
+                self?.resetGame()
+                self?.questionFactory?.loadData()
+            },
+            accessibilityIndicator: "ErrorAlert")
+        viewController?.alertPresenter.showAlert(model: model)
+    }
+    
+    func didReceiveNextQuestion(question: QuizQuestion?) {
+        guard let question = question else {
+            return
+        }
+        currentQuestion = question
+        let viewModel = convert(model: question)
+        DispatchQueue.main.async { [weak self] in
+            self?.viewController?.show(quiz: viewModel)
+            self?.viewController?.imageView?.image = viewModel.image
+            self?.viewController?.textLabel?.text = viewModel.question
+        }
     }
 }

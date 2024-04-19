@@ -28,17 +28,10 @@ final class MovieQuizViewController: UIViewController {
         textLabel.text = ""
         imageView.layer.cornerRadius = 20
         activityIndicator.hidesWhenStopped = true
-        presenter = MovieQuizPresenter() // Изменения под сомнением
+        presenter = MovieQuizPresenter(viewController: self)
         statisticService = StatisticServiceImplementation()
         showLoadingIndicator()
-        presenter.questionFactory?.loadData() // Изменения под сомнением
-        presenter.viewController = self
-    }
-    
-    // MARK: - QuestionFactoryDelegate
-    
-    func didReceiveNextQuestion(question: QuizQuestion?) {
-        presenter.didReceiveNextQuestion(question: question)
+        presenter.questionFactory?.loadData()
     }
     
     // MARK: - Public methods
@@ -54,20 +47,6 @@ final class MovieQuizViewController: UIViewController {
     func hideLoadingIndicator() {
         activityIndicator.stopAnimating()
     }
-    
-    // MARK: - IBAction
-    
-    @IBAction private func yesButtonClicked(_ sender: UIButton) {
-        presenter.yesButtonClicked()
-    }
-    
-    @IBAction private func noButtonClicked(_ sender: UIButton) {
-        presenter.noButtonClicked()
-    }
-    
-    // MARK: - Private Methods
-    
-
     
     func show(quiz step: QuizStepViewModel) {
         imageView.image = step.image
@@ -137,8 +116,6 @@ final class MovieQuizViewController: UIViewController {
         alertPresenter.showAlert(model: alertModel)
     }
     
-
-    
     func showNetworkError(message: String) {
         hideLoadingIndicator()
         let model = AlertModel(
@@ -151,5 +128,15 @@ final class MovieQuizViewController: UIViewController {
             },
             accessibilityIndicator: "NetworkErrorAlert")
         alertPresenter.showAlert(model: model)
+    }
+    
+    // MARK: - IBAction
+    
+    @IBAction private func yesButtonClicked(_ sender: UIButton) {
+        presenter.yesButtonClicked()
+    }
+    
+    @IBAction private func noButtonClicked(_ sender: UIButton) {
+        presenter.noButtonClicked()
     }
 }

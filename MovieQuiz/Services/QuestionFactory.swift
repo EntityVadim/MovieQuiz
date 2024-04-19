@@ -98,7 +98,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
             let correctAnswer = rating > randomRating
             let question = QuizQuestion(image: imageData, text: text, correctAnswer: correctAnswer)
             DispatchQueue.main.async {
-                self.delegate?.didReceiveQuestion(question: question)
+                self.delegate?.didReceiveNextQuestion(question: question)
             }
         }
     }
