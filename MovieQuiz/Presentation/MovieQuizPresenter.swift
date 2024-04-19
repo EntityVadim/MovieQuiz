@@ -97,9 +97,7 @@ final class MovieQuizPresenter {
         if isCorrect {
             correctAnswers += 1
         }
-        viewController?.imageView.layer.masksToBounds = true
-        viewController?.imageView.layer.borderWidth = 8
-        viewController?.imageView.layer.borderColor = isCorrect ? UIColor.ypGreenIOS.cgColor : UIColor.ypRedIOS.cgColor
+        viewController?.highlightImageBorder(isCorrectAnswer: isCorrect)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
             self.showNextQuestionOrResults()

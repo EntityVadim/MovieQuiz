@@ -17,6 +17,7 @@ final class MovieQuizViewController: UIViewController {
     private var presenter: MovieQuizPresenter?
 
     // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         imageView.backgroundColor = .clear
@@ -32,6 +33,12 @@ final class MovieQuizViewController: UIViewController {
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return.lightContent
+    }
+    
+    func highlightImageBorder(isCorrectAnswer: Bool) {
+        imageView.layer.masksToBounds = true
+        imageView.layer.borderWidth = 8
+        imageView.layer.borderColor = isCorrectAnswer ? UIColor.ypGreenIOS.cgColor : UIColor.ypRedIOS.cgColor
     }
     
     func showLoadingIndicator() {
