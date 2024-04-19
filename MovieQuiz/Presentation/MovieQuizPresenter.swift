@@ -10,6 +10,7 @@ final class MovieQuizPresenter {
     let questionsAmount: Int = 10
     var currentQuestion: QuizQuestion?
     var questionFactory: QuestionFactoryProtocol?
+    var statisticService: StatisticService?
     weak var viewController: MovieQuizViewController?
     
     // MARK: - Private Properties
@@ -20,6 +21,7 @@ final class MovieQuizPresenter {
     
     init(viewController: MovieQuizViewController) {
         self.viewController = viewController
+        statisticService = StatisticServiceImplementation()
         questionFactory = QuestionFactory(delegate: self)
         questionFactory?.loadData()
         viewController.showLoadingIndicator()

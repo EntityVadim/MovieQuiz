@@ -16,7 +16,6 @@ final class MovieQuizViewController: UIViewController {
     
     private var presenter: MovieQuizPresenter!
     private var moviesLoader = MoviesLoader()
-    private var statisticService: StatisticService?
     private var gameStatsText: String = ""
     lazy var alertPresenter = AlertPresenter(viewController: self)
     
@@ -29,7 +28,7 @@ final class MovieQuizViewController: UIViewController {
         imageView.layer.cornerRadius = 20
         activityIndicator.hidesWhenStopped = true
         presenter = MovieQuizPresenter(viewController: self)
-        statisticService = StatisticServiceImplementation()
+        presenter.statisticService = StatisticServiceImplementation()
         showLoadingIndicator()
         presenter.questionFactory?.loadData()
     }
@@ -59,7 +58,7 @@ final class MovieQuizViewController: UIViewController {
             return
         }
         blockingButtons.isEnabled = false
-        statisticService?.updateGameStats(isCorrect: isCorrect)
+        presenter.statisticService?.updateGameStats(isCorrect: isCorrect)
         if isCorrect {
             presenter.correctAnswers += 1
         }
@@ -90,7 +89,7 @@ final class MovieQuizViewController: UIViewController {
     }
     
     func show(quiz result: QuizResultsViewModel) {
-        guard let statisticService = statisticService else {
+        guard let statisticService = presenter.statisticService else {
             return
         }
         let correctAnswers = presenter.correctAnswers
