@@ -1,6 +1,6 @@
 import UIKit
 
-// MARK: - Movie Quiz View Controller
+// MARK: - MovieQuizViewController
 
 final class MovieQuizViewController: UIViewController {
     
@@ -32,6 +32,7 @@ final class MovieQuizViewController: UIViewController {
         statisticService = StatisticServiceImplementation()
         showLoadingIndicator()
         presenter.questionFactory?.loadData() // Изменения под сомнением
+        presenter.viewController = self
     }
     
     // MARK: - QuestionFactoryDelegate
