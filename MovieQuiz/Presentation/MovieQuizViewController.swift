@@ -2,19 +2,19 @@ import UIKit
 
 // MARK: - MovieQuizViewController
 
-final class MovieQuizViewController: UIViewController {
+final class MovieQuizViewController: UIViewController, MovieQuizViewControllerProtocol {
     
     // MARK: - IBOutlet
     
+    @IBOutlet var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var textLabel: UILabel!
-    @IBOutlet private var counterLabel: UILabel!
     @IBOutlet weak var blockingButtons: UIButton!
-    @IBOutlet var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet private var counterLabel: UILabel!
     
     // MARK: - Private Properties
     
-    private var presenter: MovieQuizPresenter?
+    private var presenter: MovieQuizPresenter!
 
     // MARK: - Lifecycle
     
@@ -42,11 +42,11 @@ final class MovieQuizViewController: UIViewController {
     }
     
     func showLoadingIndicator() {
-        activityIndicator.startAnimating()
+        activityIndicator?.startAnimating()
     }
     
     func hideLoadingIndicator() {
-        activityIndicator.stopAnimating()
+        activityIndicator?.stopAnimating()
     }
     
     func show(quiz step: QuizStepViewModel) {
