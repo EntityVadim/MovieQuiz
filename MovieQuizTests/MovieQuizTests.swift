@@ -26,7 +26,7 @@ final class MovieQuizTests: XCTestCase {
         let num1 = 1
         let num2 = 2
         let expectation = expectation(description: "Addition function expectation")
-       arithmeticOperations.addition(num1: num1, num2: num2) { result in
+        arithmeticOperations.addition(num1: num1, num2: num2) { result in
             XCTAssertEqual(result, 3)
             expectation.fulfill()
         }

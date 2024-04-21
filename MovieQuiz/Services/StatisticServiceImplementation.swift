@@ -56,7 +56,7 @@ final class StatisticServiceImplementation: StatisticService {
             userDefaults.set(newValue, forKey: Keys.correct.rawValue)
         }
     }
-
+    
     private var total: Int {
         get {
             return userDefaults.integer(forKey: Keys.total.rawValue)

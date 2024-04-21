@@ -54,7 +54,7 @@ final class MovieQuizUITests: XCTestCase {
         XCTAssertTrue(alert.label == "Этот раунд окончен!")
         XCTAssertTrue(alert.buttons.firstMatch.label == "Сыграть ещё раз")
     }
-
+    
     func testAlertDismiss() {
         sleep(2)
         for _ in 1...10 {

@@ -123,7 +123,6 @@ final class MovieQuizPresenter {
             self.proceedToNextQuestionOrResults()
         }
     }
-
 }
 
 // MARK: - QuestionFactoryDelegate

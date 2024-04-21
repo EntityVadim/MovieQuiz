@@ -16,7 +16,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
     
     // MARK: - Quiz Questions
     
-  /*private let questions: [QuizQuestion] = [
+    /*private let questions: [QuizQuestion] = [
      QuizQuestion(
      image: "The Godfather",
      text: "Рейтинг этого фильма больше чем 6?",

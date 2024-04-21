@@ -19,7 +19,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     // MARK: - Private Properties
     
     private var presenter: MovieQuizPresenter!
-
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -84,7 +84,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
             accessibilityIndicator: "NetworkErrorAlert")
         alertPresenter?.showAlert(model: model)
     }
- 
+    
     // MARK: - IBAction
     
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
