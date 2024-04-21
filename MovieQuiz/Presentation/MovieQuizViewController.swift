@@ -30,7 +30,6 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         activityIndicator.hidesWhenStopped = true
         presenter = MovieQuizPresenter(viewController: self)
         showLoadingIndicator()
-        presenter?.questionFactory?.loadData()
     }
     
     // MARK: - Public methods

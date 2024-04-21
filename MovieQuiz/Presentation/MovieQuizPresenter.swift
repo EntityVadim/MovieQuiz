@@ -22,11 +22,11 @@ final class MovieQuizPresenter {
     
     init(viewController: MovieQuizViewController) {
         self.viewController = viewController
-        statisticService = StatisticServiceImplementation()
         questionFactory = QuestionFactory(delegate: self)
         viewController.showLoadingIndicator()
         statisticService = StatisticServiceImplementation()
         viewController.alertPresenter = AlertPresenter(viewController: viewController)
+        questionFactory?.loadData()
     }
     
     func resetGame() {
