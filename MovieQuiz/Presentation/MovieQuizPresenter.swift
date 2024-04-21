@@ -88,10 +88,10 @@ final class MovieQuizPresenter {
             return
         }
         let givenAnswer = isYes
-        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        proceedWithAnswer(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
     
-    private func showNextQuestionOrResults() {
+    private func proceedToNextQuestionOrResults() {
         viewController?.blockingButtons.isEnabled = true
         if isLastQuestion() {
             let viewModel = QuizResultsViewModel(
@@ -108,7 +108,7 @@ final class MovieQuizPresenter {
         }
     }
     
-    private func showAnswerResult(isCorrect: Bool) {
+    private func proceedWithAnswer(isCorrect: Bool) {
         guard currentQuestion != nil else {
             return
         }
@@ -120,7 +120,7 @@ final class MovieQuizPresenter {
         viewController?.highlightImageBorder(isCorrectAnswer: isCorrect)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
-            self.showNextQuestionOrResults()
+            self.proceedToNextQuestionOrResults()
         }
     }
 
