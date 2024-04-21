@@ -12,6 +12,10 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     @IBOutlet weak var blockingButtons: UIButton!
     @IBOutlet private var counterLabel: UILabel!
     
+    // MARK: - Public Properties
+    
+    var alertPresenter: AlertPresenter?
+    
     // MARK: - Private Properties
     
     private var presenter: MovieQuizPresenter!
@@ -35,6 +39,19 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         return.lightContent
     }
     
+    func show(quiz result: QuizResultsViewModel) {
+        let resultMessage = presenter.makeResultMessage()
+        let alertModel = AlertModel(
+            title: "Этот раунд окончен!",
+            message: resultMessage,
+            buttonText: "Сыграть ещё раз",
+            completion: { [weak self] in
+                self?.presenter.resetGame()
+            },
+            accessibilityIndicator: "QuizResultsAlert")
+        alertPresenter?.showAlert(model: alertModel)
+    }
+    
     func highlightImageBorder(isCorrectAnswer: Bool) {
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
@@ -53,6 +70,19 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
+    }
+    
+    func showNetworkError(message: String) {
+        let model = AlertModel(
+            title: "Ошибка",
+            message: message,
+            buttonText: "Попробовать еще раз",
+            completion: { [weak self] in
+                self?.presenter.resetGame()
+                self?.presenter.questionFactory?.loadData()
+            },
+            accessibilityIndicator: "NetworkErrorAlert")
+        alertPresenter?.showAlert(model: model)
     }
  
     // MARK: - IBAction
