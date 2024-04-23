@@ -1,9 +1,11 @@
 import Foundation
 
 // MARK: - Statistic Service Implementation
+
 final class StatisticServiceImplementation: StatisticService {
     
     // MARK: - Public Properties
+    
     var totalAccuracy: Double {
         if total == 0 {
             return 0
@@ -39,6 +41,7 @@ final class StatisticServiceImplementation: StatisticService {
     }
     
     // MARK: - Private Properties
+    
     private let userDefaults = UserDefaults.standard
     
     private enum Keys: String {
@@ -53,7 +56,7 @@ final class StatisticServiceImplementation: StatisticService {
             userDefaults.set(newValue, forKey: Keys.correct.rawValue)
         }
     }
-
+    
     private var total: Int {
         get {
             return userDefaults.integer(forKey: Keys.total.rawValue)
@@ -64,6 +67,7 @@ final class StatisticServiceImplementation: StatisticService {
     }
     
     // MARK: - Public Methods
+    
     func store(correct count: Int, total amount: Int) {
         self.correct += count
         self.total += amount
