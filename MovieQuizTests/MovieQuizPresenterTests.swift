@@ -8,6 +8,7 @@ final class MovieQuizViewControllerMock: MovieQuizViewControllerProtocol {
     var blockingButtons: UIButton!
     
     func show(quiz step: QuizStepViewModel) {}
+    func showNextQuestionOrResults() {}
     func show(quiz result: QuizResultsViewModel) {}
     func highlightImageBorder(isCorrectAnswer: Bool) {}
     func showLoadingIndicator() {}

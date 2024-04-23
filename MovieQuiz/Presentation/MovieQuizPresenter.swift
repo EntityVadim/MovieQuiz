@@ -97,6 +97,7 @@ final class MovieQuizPresenter {
 //                buttonText: "Сыграть ещё раз")
 //            viewController?.show(quiz: viewModel)
 //            print(gameStatsText)
+            viewController?.showNextQuestionOrResults()
             viewController?.imageView.layer.borderColor = UIColor.clear.cgColor
         } else {
             switchToNextQuestion()

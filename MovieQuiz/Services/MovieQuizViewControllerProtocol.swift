@@ -8,7 +8,7 @@ protocol MovieQuizViewControllerProtocol: AnyObject {
     var blockingButtons: UIButton! { get set }
     
     func show(quiz result: QuizResultsViewModel)
-    //func showNextQuestionOrResults()
+    func showNextQuestionOrResults()
     func highlightImageBorder(isCorrectAnswer: Bool)
     func showLoadingIndicator()
     func hideLoadingIndicator()
