@@ -7,9 +7,9 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     // MARK: - IBOutlet
     
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var textLabel: UILabel!
-    @IBOutlet weak var blockingButtons: UIButton!
+    @IBOutlet var imageView: UIImageView!
+    @IBOutlet var textLabel: UILabel!
+    @IBOutlet var blockingButtons: UIButton!
     @IBOutlet private var counterLabel: UILabel!
     
     // MARK: - Public Properties
@@ -29,6 +29,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         imageView.layer.cornerRadius = 20
         activityIndicator.hidesWhenStopped = true
         presenter = MovieQuizPresenter(viewController: self)
+        alertPresenter = AlertPresenter(viewController: self)
         showLoadingIndicator()
     }
     

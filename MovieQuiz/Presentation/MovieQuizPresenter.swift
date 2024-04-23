@@ -8,7 +8,7 @@ final class MovieQuizPresenter {
     
     var questionFactory: QuestionFactoryProtocol?
     var statisticService: StatisticService?
-    weak var viewController: MovieQuizViewController?
+    weak var viewController: MovieQuizViewControllerProtocol?
     
     // MARK: - Private Properties
     
@@ -20,12 +20,11 @@ final class MovieQuizPresenter {
     
     // MARK: - Public methods
     
-    init(viewController: MovieQuizViewController) {
+    init(viewController: MovieQuizViewControllerProtocol) {
         self.viewController = viewController
         questionFactory = QuestionFactory(delegate: self)
         viewController.showLoadingIndicator()
         statisticService = StatisticServiceImplementation()
-        viewController.alertPresenter = AlertPresenter(viewController: viewController)
         questionFactory?.loadData()
     }
     

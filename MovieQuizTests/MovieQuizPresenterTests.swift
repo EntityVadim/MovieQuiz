@@ -2,6 +2,11 @@ import XCTest
 @testable import MovieQuiz
 
 final class MovieQuizViewControllerMock: MovieQuizViewControllerProtocol {
+    var alertPresenter: AlertPresenter?
+    var imageView: UIImageView!
+    var textLabel: UILabel!
+    var blockingButtons: UIButton!
+    
     func show(quiz step: QuizStepViewModel) {}
     func show(quiz result: QuizResultsViewModel) {}
     func highlightImageBorder(isCorrectAnswer: Bool) {}
@@ -12,8 +17,8 @@ final class MovieQuizViewControllerMock: MovieQuizViewControllerProtocol {
 
 final class MovieQuizPresenterTests: XCTestCase {
     func testPresenterConvertModel() throws {
-        let viewController = MovieQuizViewController()
-        let sut = MovieQuizPresenter(viewController: viewController)
+        let viewControllerMock = MovieQuizViewControllerMock()
+        let sut = MovieQuizPresenter(viewController: viewControllerMock)
         let emptyData = Data()
         let question = QuizQuestion(image: emptyData, text: "Question Text", correctAnswer: true)
         let viewModel = sut.convert(model: question)
