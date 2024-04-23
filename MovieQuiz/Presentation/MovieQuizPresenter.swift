@@ -13,7 +13,7 @@ final class MovieQuizPresenter {
     // MARK: - Private Properties
     
     private var currentQuestion: QuizQuestion?
-    private var gameStatsText: String = ""
+     var gameStatsText: String = ""
     private var correctAnswers: Int = 0
     private var currentQuestionIndex: Int = 0
     private let questionsAmount: Int = 10
@@ -51,11 +51,9 @@ final class MovieQuizPresenter {
     
     func makeResultMessage() -> String {
         guard let statisticService = statisticService else {
-            return "Ошибка"
+            return "Статистика недоступна"
         }
-        let correctAnswers = correctAnswers
-        let totalQuestions = questionsAmount
-        statisticService.store(correct: correctAnswers, total: totalQuestions)
+        statisticService.store(correct: correctAnswers, total: questionsAmount)
         let text = "Ваш результат: \(correctAnswers)/10"
         let completedGamesCount = "Количество сыгранных квизов: \(statisticService.gamesCount)"
         let bestGame = statisticService.bestGame
@@ -93,12 +91,12 @@ final class MovieQuizPresenter {
     private func proceedToNextQuestionOrResults() {
         viewController?.blockingButtons.isEnabled = true
         if isLastQuestion() {
-            let viewModel = QuizResultsViewModel(
-                title: "Этот раунд окончен!",
-                text: gameStatsText,
-                buttonText: "Сыграть ещё раз")
-            viewController?.show(quiz: viewModel)
-            print(gameStatsText)
+//            let viewModel = QuizResultsViewModel(
+//                title: "Этот раунд окончен!",
+//                text: gameStatsText,
+//                buttonText: "Сыграть ещё раз")
+//            viewController?.show(quiz: viewModel)
+//            print(gameStatsText)
             viewController?.imageView.layer.borderColor = UIColor.clear.cgColor
         } else {
             switchToNextQuestion()
@@ -139,16 +137,7 @@ extension MovieQuizPresenter: QuestionFactoryDelegate {
     
     func didReceiveError(error: Error) {
         viewController?.hideLoadingIndicator()
-        let model = AlertModel(
-            title: "Ошибка",
-            message: error.localizedDescription,
-            buttonText: "Попробовать еще раз",
-            completion: { [weak self] in
-                self?.resetGame()
-                self?.questionFactory?.loadData()
-            },
-            accessibilityIndicator: "ErrorAlert")
-        viewController?.alertPresenter?.showAlert(model: model)
+        viewController?.showNetworkError(message: error.localizedDescription)
     }
     
     func didReceiveNextQuestion(question: QuizQuestion?) {
