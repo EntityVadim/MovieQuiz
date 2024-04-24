@@ -8,7 +8,7 @@ final class MovieQuizPresenter {
     
     var questionFactory: QuestionFactoryProtocol?
     var statisticService: StatisticService?
-    weak var viewController: MovieQuizViewController?
+    weak var viewController: MovieQuizViewControllerProtocol?
     
     // MARK: - Private Properties
     
@@ -18,16 +18,17 @@ final class MovieQuizPresenter {
     private var currentQuestionIndex: Int = 0
     private let questionsAmount: Int = 10
     
-    // MARK: - Public methods
+    // MARK: - Initializers
     
-    init(viewController: MovieQuizViewController) {
+    init(viewController: MovieQuizViewControllerProtocol) {
         self.viewController = viewController
         questionFactory = QuestionFactory(delegate: self)
         viewController.showLoadingIndicator()
         statisticService = StatisticServiceImplementation()
-        viewController.alertPresenter = AlertPresenter(viewController: viewController)
         questionFactory?.loadData()
     }
+    
+    // MARK: - Public methods
     
     func resetGame() {
         currentQuestionIndex = 0
@@ -52,11 +53,9 @@ final class MovieQuizPresenter {
     
     func makeResultMessage() -> String {
         guard let statisticService = statisticService else {
-            return "Ошибка"
+            return "Статистика недоступна"
         }
-        let correctAnswers = correctAnswers
-        let totalQuestions = questionsAmount
-        statisticService.store(correct: correctAnswers, total: totalQuestions)
+        statisticService.store(correct: correctAnswers, total: questionsAmount)
         let text = "Ваш результат: \(correctAnswers)/10"
         let completedGamesCount = "Количество сыгранных квизов: \(statisticService.gamesCount)"
         let bestGame = statisticService.bestGame
@@ -94,12 +93,7 @@ final class MovieQuizPresenter {
     private func proceedToNextQuestionOrResults() {
         viewController?.blockingButtons.isEnabled = true
         if isLastQuestion() {
-            let viewModel = QuizResultsViewModel(
-                title: "Этот раунд окончен!",
-                text: gameStatsText,
-                buttonText: "Сыграть ещё раз")
-            viewController?.show(quiz: viewModel)
-            print(gameStatsText)
+            viewController?.showNextQuestionOrResults()
             viewController?.imageView.layer.borderColor = UIColor.clear.cgColor
         } else {
             switchToNextQuestion()
@@ -140,16 +134,7 @@ extension MovieQuizPresenter: QuestionFactoryDelegate {
     
     func didReceiveError(error: Error) {
         viewController?.hideLoadingIndicator()
-        let model = AlertModel(
-            title: "Ошибка",
-            message: error.localizedDescription,
-            buttonText: "Попробовать еще раз",
-            completion: { [weak self] in
-                self?.resetGame()
-                self?.questionFactory?.loadData()
-            },
-            accessibilityIndicator: "ErrorAlert")
-        viewController?.alertPresenter?.showAlert(model: model)
+        viewController?.showNetworkError(message: error.localizedDescription)
     }
     
     func didReceiveNextQuestion(question: QuizQuestion?) {

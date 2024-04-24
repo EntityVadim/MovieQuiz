@@ -59,12 +59,14 @@ final class QuestionFactory: QuestionFactoryProtocol {
      correctAnswer: false)
      ]*/
     
-    // MARK: - Public Methods
+    // MARK: - Initializers
     
     init(delegate: QuestionFactoryDelegate?) {
         self.delegate = delegate
         moviesLoader = MoviesLoader()
     }
+    
+    // MARK: - Public Methods
     
     func setup(delegate: QuestionFactoryDelegate) {
         self.delegate = delegate
@@ -122,7 +124,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
         }
     }
     
-    // MARK: - Private Methods
+    // MARK: - ShowNetworkError
     
     private func showNetworkError(message: String) {
         delegate?.didReceiveError(error: NSError(domain: "com.yp.MovieQuiz", code: 1, userInfo: [NSLocalizedDescriptionKey: message]))

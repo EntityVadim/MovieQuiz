@@ -6,7 +6,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     
     // MARK: - IBOutlet
     
-    @IBOutlet var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var textLabel: UILabel!
     @IBOutlet weak var blockingButtons: UIButton!
@@ -29,6 +29,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         imageView.layer.cornerRadius = 20
         activityIndicator.hidesWhenStopped = true
         presenter = MovieQuizPresenter(viewController: self)
+        alertPresenter = AlertPresenter(viewController: self)
         showLoadingIndicator()
     }
     
@@ -49,6 +50,16 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
             },
             accessibilityIndicator: "QuizResultsAlert")
         alertPresenter?.showAlert(model: alertModel)
+    }
+    
+    func showNextQuestionOrResults() {
+        let resultMessage = presenter.makeResultMessage()
+        let viewModel = QuizResultsViewModel(
+            title: "Этот раунд окончен!",
+            text: resultMessage,
+            buttonText: "Сыграть ещё раз")
+        presenter.viewController?.show(quiz: viewModel)
+        print(resultMessage)
     }
     
     func highlightImageBorder(isCorrectAnswer: Bool) {

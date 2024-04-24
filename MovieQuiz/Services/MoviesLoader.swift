@@ -10,6 +10,8 @@ struct MoviesLoader: MoviesLoading {
     
     private let networkClient: NetworkRouting
     
+    // MARK: - Initializers
+    
     init(networkClient: NetworkRouting = NetworkClient()) {
         self.networkClient = networkClient
     }
@@ -22,6 +24,8 @@ struct MoviesLoader: MoviesLoading {
         }
         return url
     }
+    
+    // MARK: - LoadMovies
     
     func loadMovies(handler: @escaping (Result<MostPopularMovies, Error>) -> Void) {
         networkClient.fetch(url: mostPopularMoviesUrl) { result in
