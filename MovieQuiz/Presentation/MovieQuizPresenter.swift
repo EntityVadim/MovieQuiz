@@ -13,12 +13,12 @@ final class MovieQuizPresenter {
     // MARK: - Private Properties
     
     private var currentQuestion: QuizQuestion?
-     var gameStatsText: String = ""
+    private var gameStatsText: String = ""
     private var correctAnswers: Int = 0
     private var currentQuestionIndex: Int = 0
     private let questionsAmount: Int = 10
     
-    // MARK: - Public methods
+    // MARK: - Initializers
     
     init(viewController: MovieQuizViewControllerProtocol) {
         self.viewController = viewController
@@ -27,6 +27,8 @@ final class MovieQuizPresenter {
         statisticService = StatisticServiceImplementation()
         questionFactory?.loadData()
     }
+    
+    // MARK: - Public methods
     
     func resetGame() {
         currentQuestionIndex = 0
@@ -88,15 +90,9 @@ final class MovieQuizPresenter {
         proceedWithAnswer(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
     
-    private func proceedToNextQuestionOrResults() {
+     func proceedToNextQuestionOrResults() {
         viewController?.blockingButtons.isEnabled = true
         if isLastQuestion() {
-//            let viewModel = QuizResultsViewModel(
-//                title: "Этот раунд окончен!",
-//                text: gameStatsText,
-//                buttonText: "Сыграть ещё раз")
-//            viewController?.show(quiz: viewModel)
-//            print(gameStatsText)
             viewController?.showNextQuestionOrResults()
             viewController?.imageView.layer.borderColor = UIColor.clear.cgColor
         } else {

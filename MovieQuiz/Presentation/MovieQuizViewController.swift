@@ -53,12 +53,13 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     }
     
     func showNextQuestionOrResults() {
+        let resultMessage = presenter.makeResultMessage()
         let viewModel = QuizResultsViewModel(
             title: "Этот раунд окончен!",
-            text: presenter.gameStatsText,
+            text: resultMessage,
             buttonText: "Сыграть ещё раз")
         presenter.viewController?.show(quiz: viewModel)
-        print(presenter.gameStatsText)
+        print(resultMessage)
     }
     
     func highlightImageBorder(isCorrectAnswer: Bool) {

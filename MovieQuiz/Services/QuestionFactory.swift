@@ -59,12 +59,14 @@ final class QuestionFactory: QuestionFactoryProtocol {
      correctAnswer: false)
      ]*/
     
-    // MARK: - Public Methods
+    // MARK: - Initializers
     
     init(delegate: QuestionFactoryDelegate?) {
         self.delegate = delegate
         moviesLoader = MoviesLoader()
     }
+    
+    // MARK: - Public Methods
     
     func setup(delegate: QuestionFactoryDelegate) {
         self.delegate = delegate
