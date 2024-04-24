@@ -6,11 +6,13 @@ final class AlertPresenter {
     
     private weak var viewController: UIViewController?
     
-    // MARK: - Public methods
+    // MARK: - Initializers
     
     init(viewController: UIViewController) {
         self.viewController = viewController
     }
+    
+    // MARK: - ShowAlert
     
     func showAlert(model: AlertModel) {
         guard let viewController = viewController else {

@@ -90,7 +90,7 @@ final class MovieQuizPresenter {
         proceedWithAnswer(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
     
-     func proceedToNextQuestionOrResults() {
+    private func proceedToNextQuestionOrResults() {
         viewController?.blockingButtons.isEnabled = true
         if isLastQuestion() {
             viewController?.showNextQuestionOrResults()
