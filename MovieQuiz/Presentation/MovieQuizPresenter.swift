@@ -28,7 +28,7 @@ final class MovieQuizPresenter {
         questionFactory?.loadData()
     }
     
-    // MARK: - Public methods
+    // MARK: - Public Methods
     
     func resetGame() {
         currentQuestionIndex = 0
